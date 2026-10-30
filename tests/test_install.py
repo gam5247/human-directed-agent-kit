@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location('kit_install', ROOT / 'install.py')
@@ -90,6 +91,15 @@ class InstallBehavior(unittest.TestCase):
         outside = self.project.parent / 'outside'
         with self.assertRaises(ValueError):
             INSTALL.inside(self.project, outside / 'SKILL.md')
+
+    def test_global_configuration_target_is_refused(self):
+        for name in ('.codex', '.agents'):
+            target = self.project / name
+            target.mkdir()
+            with patch.object(INSTALL.Path, 'home', return_value=self.project):
+                with self.assertRaisesRegex(ValueError, 'Global agent configuration'):
+                    INSTALL.plan_install(target, True)
+            self.assertEqual(list(target.iterdir()), [])
 
     def test_symlinked_parent_escape_if_supported(self):
         outside = self.project.parent / 'outside'

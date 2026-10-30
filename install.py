@@ -5,7 +5,7 @@ from pathlib import Path
 
 BEGIN = '<!-- BEGIN human-directed-agent-kit -->'
 END = '<!-- END human-directed-agent-kit -->'
-SKILLS = ('decision-brief', 'scoped-build', 'explain-implementation')
+SKILLS = ('decision-brief', 'scoped-build', 'explain-implementation', 'build-web-service')
 
 
 def inside(root, path):
@@ -36,6 +36,9 @@ def plan_install(target, with_agents):
     root = target.resolve(strict=True)
     if not root.is_dir():
         raise ValueError('Target must be an existing project directory')
+    for reserved in (Path.home() / '.codex', Path.home() / '.agents'):
+        if root.is_relative_to(reserved.resolve()):
+            raise ValueError('Global agent configuration is not a project installation target')
     source = Path(__file__).resolve().parent
     changes = []
     for name in SKILLS:
