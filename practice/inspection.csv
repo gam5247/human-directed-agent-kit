@@ -1,0 +1,7 @@
+lot_id,measured_at,defects,inspected,review_status
+A01,2026-01-01T09:00,1,100,final
+A01,2026-01-01T10:00,2,100,revised
+A02,2026-01-01T09:00,,100,final
+A03,2026-01-01T09:00,0,100,final
+A04,2026-01-01T09:00,4,100,final
+A05,2026-01-01T09:00,1,100,pending
