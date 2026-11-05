@@ -11,7 +11,7 @@ Codex 자체가 도구 실행·반복·문맥 관리를 맡는 하네스다. 이
 | [AGENTS.md](AGENTS.md) | 문제 정의·사람의 결정·자율 실행·이해를 연결하는 상시 원칙 |
 | [decision-brief](.agents/skills/decision-brief/SKILL.md) | 중요한 방법을 고르기 전 자료·대안·근거 확인과 쉬운 설명 |
 | [scoped-build](.agents/skills/scoped-build/SKILL.md) | 범위 안에서 실행을 끝내고 미합의 결정만 사람에게 돌림 |
-| [explain-implementation](.agents/skills/explain-implementation/SKILL.md) | 실제 코드·입출력·한계에 연결해 이해를 돕는 설명 |
+| [explain-implementation](.agents/skills/explain-implementation/SKILL.md) | 실제 선택·흐름·검증·수정 이력을 작업 중 기록하고 자기 설명을 돕기 |
 | [build-web-service](.agents/skills/build-web-service/SKILL.md) | 사용자 흐름·API·필요한 저장소·오류 표시를 연결해 구현·검증 |
 | [install.py](install.py) | 프로젝트 안에 스킬 복사, 선택적으로 기존 AGENTS 뒤에 지침 추가 |
 | [연습 과제](practice/BRIEF.md) | 직접 만든 CSV로 관측·정책·구현·이해를 구분하는 연습 |
@@ -41,6 +41,8 @@ https://github.com/gam5247/human-directed-agent-kit.git 을
 전역 설정이나 관리 지침은 수정하지 말고, _agent_kit/AGENTS.md를 보조 지침으로 읽어줘.
 중요한 방법 선택에는 _agent_kit/.agents/skills/decision-brief/SKILL.md를,
 웹서비스 구현에는 _agent_kit/.agents/skills/build-web-service/SKILL.md를 읽고 적용해줘.
+주요 작업 단위가 끝나면 _agent_kit/.agents/skills/explain-implementation/SKILL.md에 따라
+선택 이유·실제 흐름·확인 결과·한계를 기존 현행 문서에 짧게 갱신하고 내가 이해하도록 설명해줘.
 착수 전에 주요 기능과 가정을 짧게 알리고, 미합의 정책만 내게 질문해줘.
 ```
 
@@ -77,6 +79,14 @@ AGENTS 자동 발견은 일반적으로 세션 시작 때 이루어진다. 설�
 4. 설명은 실제 코드와 입력·출력으로 확인한다. 주장한 성능에는 그 주장에 맞는 측정이 필요하다.
 5. 중요한 선택 이유와 실패 조건을 자기 말로 설명한다. AI가 대신 쓴 답변을 자신의 판단 이력으로 삼지 않는다.
 
+## 작업 중 기록하고 자기 말로 설명하기
+
+중요한 선택·대표 흐름·오류 수정이 끝날 때 기존 현행 문서의 관련 부분을 갱신한다. 선택과 대안, 실제 데이터·상태 흐름, 관측한 입출력, 실패·변경 조건, 미확인 부분, 다음 작업이 연결돼 있어야 한다. 이미 문서 역할이 있으면 그대로 쓰고, 작은 작업은 한 README 안의 짧은 기록으로 충분하다. 여러 세션도 하나의 현행 상태를 공유한다.
+
+세부 기준은 [explain-implementation](.agents/skills/explain-implementation/SKILL.md)에 있다. 낯선 용어와 강한 주장은 실제 근거를 확인하고 설명한다. 제출·인수인계 전에는 도움을 받을 수 있는 단계에서 사용자가 직접 핵심 내용을 설명해 보고 빈 부분만 보충한다. 기록에 근거한 질문이 생겨도 자신의 실제 작업과 연결해 답할 수 있게 하는 방식이며, 질문 생성 방향·난이도·평가 결과를 보장하지 않는다.
+
+웹·계산 서비스는 상태 소유와 긴 작업의 재실행·실패·공개 규칙을, 최적화는 제약 충족과 개선·최적성의 차이를 확인한다. 조사·비교·변경 검토는 출처·기간·단위·판단 기준과 가정의 영향을 연결한다. 특정 기술 구조나 많은 문서가 필수인 것은 아니다. 계획을 구현으로, AI 보고를 실제 관측으로, AI가 정한 이유를 사용자 판단으로 바꾸어 쓰지 않는다.
+
 ## 공개 자료에서 가져온 부분
 
 2026-10-31 확인한 원문을 바탕으로 구성했다.
@@ -90,6 +100,8 @@ AGENTS 자동 발견은 일반적으로 세션 시작 때 이루어진다. 설�
 Superpowers의 아이디어와 흐름을 한국어로 재구성한 파생 부분이 있다. [원본 MIT 저작권·허가문](LICENSES/superpowers-MIT.txt)을 유지한다. 그 외 이 묶음은 [MIT](LICENSE)로 배포한다. 원본 프로젝트의 공식 배포판이나 제휴 도구가 아니다.
 
 ## 확인 범위
+
+2026-11-05, 작업 중 사실 기록·현행 핸드오프·자기 설명을 보완했다. 공개용 사본의 설치기를 새 로컬 프로젝트에 적용했을 때 기존 AGENTS의 BOM·CRLF와 원문 접두부가 보존됐고, 설치된 설명 스킬에 새 기록 기준이 들어간 것을 확인했다. 네 스킬 모두 갱신한 원본과 같은 내용으로 설치됐다. 기존 설치 확인에서도 파일 충돌·관리 설정 대상 거절 동작을 유지했다. 이 확인은 파일 적용 범위이며, 실제 에이전트의 준수·사용자 이해·질문 생성·평가 효과는 확인하지 않았다.
 
 2026-10-31, Windows의 Python 3.12 환경에서 다음 동작을 확인했다.
 
