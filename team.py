@@ -57,6 +57,7 @@ def dispatch(db, worker, task, scope):
 def take(db, worker):
     db.execute('BEGIN IMMEDIATE')
     try:
+        db.execute('INSERT OR REPLACE INTO settings VALUES (?,?)', ('worker:' + worker, str(time.time())))
         if db.execute("SELECT 1 FROM settings WHERE key='stopped' AND value='1'").fetchone():
             db.commit()
             return {'stopped': True}
@@ -109,6 +110,7 @@ def main():
     cancel.add_argument('--id', required=True)
     cancel.add_argument('--reason', required=True)
     commands.add_parser('status')
+    commands.add_parser('workers')
     commands.add_parser('stop')
     args = parser.parse_args()
     db = connect(args.root)
@@ -116,7 +118,13 @@ def main():
         if args.command in ('init', 'stop'):
             with db:
                 db.execute("INSERT OR REPLACE INTO settings VALUES ('stopped',?)", ('1' if args.command == 'stop' else '0',))
+                if args.command == 'init':
+                    db.execute("INSERT OR REPLACE INTO settings VALUES ('started',?)", (str(time.time()),))
             result = {'stopped': args.command == 'stop'}
+        elif args.command == 'workers':
+            started = db.execute("SELECT value FROM settings WHERE key='started'").fetchone()
+            since = float(started['value']) if started else 0
+            result = [{'worker': row['key'][7:], 'last_seen': float(row['value'])} for row in db.execute("SELECT key,value FROM settings WHERE key LIKE 'worker:%' ORDER BY key") if float(row['value']) >= since]
         elif args.command == 'send':
             task = args.task_file.read_text(encoding='utf-8') if args.task_file else args.task
             result = dispatch(db, args.worker, task, args.scope)

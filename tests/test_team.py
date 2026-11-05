@@ -47,6 +47,7 @@ class TeamMailbox(unittest.TestCase):
         self.assertEqual(len(claimed), 1, replies)
         self.assertTrue(any(reply.get('busy') for reply in replies), replies)
         claim = claimed[0]
+        self.assertEqual([item['worker'] for item in self.call('workers')], ['worker-1'])
         self.call('send', '--worker', 'worker-2', '--scope', 'src/core/file.py', '--task', 'conflict', fail=True)
         self.call('finish', '--id', task['id'], '--token', 'incorrect', '--result', 'wrong', fail=True)
         self.call('finish', '--id', task['id'], '--token', claim['token'], '--result', '2 + 3 = 5; scope src/core')
